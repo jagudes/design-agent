@@ -1,0 +1,1 @@
+Agent generujący projekty graficzne
