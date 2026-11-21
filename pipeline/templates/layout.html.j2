@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: {{ w }}mm {{ h }}mm; margin: 0; }
+  :root { --u: {{ ([w, h] | min) / 100 }}mm; }
+  html, body { margin: 0; width: {{ w }}mm; height: {{ h }}mm; overflow: hidden; }
+  body {
+    box-sizing: border-box;
+    padding: calc(var(--u) * 8);
+    background: {{ spec.palette.bg }};
+    color: {{ spec.palette.fg }};
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  h1 {
+    margin: 0;
+    font-size: calc(var(--u) * 13);
+    line-height: 1.02;
+    color: {{ spec.palette.accent }};
+    text-transform: uppercase;
+  }
+  .sub { font-size: calc(var(--u) * 5); margin-top: calc(var(--u) * 3); }
+  .body { font-size: calc(var(--u) * 3.6); line-height: 1.4; }
+  .meta { font-size: calc(var(--u) * 4.2); font-weight: 700; }
+  .meta span { display: block; }
+
+  /* układ poziomy: tytuł po lewej, szczegóły po prawej */
+  body.landscape {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-rows: 1fr auto;
+    column-gap: calc(var(--u) * 6);
+  }
+  body.landscape header { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+  body.landscape h1 { font-size: calc(var(--u) * 10); }
+  body.landscape .body { grid-column: 2; grid-row: 1; align-self: center; }
+  body.landscape .meta { grid-column: 2; grid-row: 2; }
+</style>
+</head>
+<body class="{{ spec.orientation }}">
+  <header>
+    <h1>{{ spec.title }}</h1>
+    {% if spec.subtitle %}<div class="sub">{{ spec.subtitle }}</div>{% endif %}
+  </header>
+  {% if spec.body %}<div class="body">{{ spec.body }}</div>{% endif %}
+  <footer class="meta">
+    {% if spec.date %}<span>{{ spec.date }}</span>{% endif %}
+    {% if spec.place %}<span>{{ spec.place }}</span>{% endif %}
+  </footer>
+</body>
+</html>
